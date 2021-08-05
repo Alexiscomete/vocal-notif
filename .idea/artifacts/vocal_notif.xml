@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="vocal-notif">
+    <output-path>$PROJECT_DIR$/out/artifacts/vocal_notif</output-path>
+    <root id="archive" name="vocal-notif.jar">
+      <element id="extracted-dir" path="$PROJECT_DIR$/../javacord-3.3.0-shaded.jar" path-in-jar="/" />
+      <element id="module-output" name="vocal-notif" />
+    </root>
+  </artifact>
+</component>
