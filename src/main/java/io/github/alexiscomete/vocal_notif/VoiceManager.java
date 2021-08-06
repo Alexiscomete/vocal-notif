@@ -23,29 +23,34 @@ public class VoiceManager {
 
     public static void switchUser(long serverID, long userID) {
         SaveLocation<User> server = getServer(serverID);
-        Optional<User> op = Main.api.getCachedUserById(userID);
-        if (!op.isPresent()) {
-            return;
-        }
         if (server == null) {
+            System.out.println("null");
             return;
         }
-        User user = op.get();
-        if (server.getContent().contains(user)) {
-            server.getContent().remove(user);
-        } else {
-            server.getContent().add(user);
-        }
-        server.saveAll();
+        CompletableFuture<User> op = Main.api.getUserById(userID);
+        op.thenAcceptAsync(user -> {
+            System.out.println("sw");
+            if (server.getContent().contains(user)) {
+                System.out.println("co");
+                server.getContent().remove(user);
+            } else {
+                System.out.println("n");
+                server.getContent().add(user);
+            }
+            server.saveAll();
+        });
     }
 
     public static void notifServer(Server serv, VoiceChannel voiceChannel, User us) {
+        System.out.println("notif");
         SaveLocation<User> server = getServer(serv.getId());
         if (server == null) {
             return;
         }
         CompletableFuture<Invite> inviteF = new InviteBuilder((ServerChannel) voiceChannel).setNeverExpire().create();
+        System.out.println("Invite ->");
         inviteF.thenAcceptAsync(invite -> {
+            System.out.println("<-");
             for (User user : server.getContent()) {
                 if (voiceChannel.canConnect(user)) {
                     user.sendMessage("Salut ! <@" + us.getId() + "> (" + us.getName() + ")  est en vocal sur un server ... clique sur le lien pour le rejoindre : " + invite.getCode());

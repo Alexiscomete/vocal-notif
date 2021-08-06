@@ -12,7 +12,6 @@ public class MessageListener implements MessageCreateListener {
     @Override
     public void onMessageCreate(MessageCreateEvent messageCreateEvent) {
         if (messageCreateEvent.getMessageContent().startsWith(")")) {
-            System.out.println("bug");
             String content = messageCreateEvent.getMessageContent().toLowerCase().substring(1);
             String[] args = content.split(" ");
             CommandBot commandBot = commands.get(args[0]);

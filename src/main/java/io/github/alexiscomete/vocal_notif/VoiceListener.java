@@ -6,6 +6,7 @@ import org.javacord.api.listener.channel.server.voice.ServerVoiceChannelMemberJo
 public class VoiceListener implements ServerVoiceChannelMemberJoinListener {
     @Override
     public void onServerVoiceChannelMemberJoin(ServerVoiceChannelMemberJoinEvent serverVoiceChannelMemberJoinEvent) {
+        System.out.println("vl");
         VoiceManager.notifServer(serverVoiceChannelMemberJoinEvent.getServer(), serverVoiceChannelMemberJoinEvent.getChannel(), serverVoiceChannelMemberJoinEvent.getUser());
     }
 }
