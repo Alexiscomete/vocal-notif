@@ -41,12 +41,15 @@ public class SaveLocation<E> {
 
     public void saveAll() {
         StringBuilder save = new StringBuilder();
-        for (E e : content) {
-            System.out.println("e");
-            save.append(ar.apply(e));
-            System.out.println("ee");
+        for (int i = 0; i < content.size(); i++) {
+            E e = content.get(i);
+            if (e != null) {
+                save.append(ar.apply(e));
+                if (i != content.size() -1) {
+                    save.append(" ");
+                }
+            }
         }
-        System.out.println("after");
         System.out.println("Save : " + save);
         FileOutputStream fos;
         try {

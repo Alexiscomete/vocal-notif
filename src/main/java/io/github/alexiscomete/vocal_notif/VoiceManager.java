@@ -52,8 +52,9 @@ public class VoiceManager {
         inviteF.thenAcceptAsync(invite -> {
             System.out.println("<-");
             for (User user : server.getContent()) {
-                if (voiceChannel.canConnect(user)) {
-                    user.sendMessage("Salut ! <@" + us.getId() + "> (" + us.getName() + ")  est en vocal sur un server ... clique sur le lien pour le rejoindre : " + invite.getCode());
+                System.out.println("User");
+                if (user != null && voiceChannel.canConnect(user) && user.getId() != us.getId()) {
+                    user.sendMessage("Salut ! <@" + us.getId() + "> (" + us.getName() + ")  est en vocal sur un serveur ... clique sur le lien pour le rejoindre : https://discord.gg/" + invite.getCode());
                 }
             }
         });
@@ -62,9 +63,9 @@ public class VoiceManager {
 
     public static SaveLocation<User> getServer(long server) {
         try {
-            SaveLocation<User> saveLocation = new SaveLocation<User>(" ", "/voice-save/" + server + ".txt", VoiceManager::toUser, ar -> {
-                System.out.println("ar");
-                return String.valueOf(ar.getId());
+            SaveLocation<User> saveLocation = new SaveLocation<>(" ", "/voice-save/" + server + ".txt", VoiceManager::toUser, ar -> {
+                long id = ar.getId();
+                return String.valueOf(id);
             });
             saveLocation.loadAll();
             return saveLocation;
