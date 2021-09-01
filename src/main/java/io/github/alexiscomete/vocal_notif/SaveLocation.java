@@ -42,12 +42,16 @@ public class SaveLocation<E> {
     public void saveAll() {
         StringBuilder save = new StringBuilder();
         for (E e : content) {
+            System.out.println("e");
             save.append(ar.apply(e));
+            System.out.println("ee");
         }
+        System.out.println("after");
+        System.out.println("Save : " + save);
         FileOutputStream fos;
         try {
             fos = new FileOutputStream(file);
-            fos.write(String.valueOf(save).getBytes());
+            fos.write(save.toString().getBytes());
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();

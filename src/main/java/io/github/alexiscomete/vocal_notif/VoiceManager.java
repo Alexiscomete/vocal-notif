@@ -62,7 +62,10 @@ public class VoiceManager {
 
     public static SaveLocation<User> getServer(long server) {
         try {
-            SaveLocation<User> saveLocation = new SaveLocation<>(" ", "/voice-save/" + server + ".txt", VoiceManager::toUser, ar -> String.valueOf(ar.getId()));
+            SaveLocation<User> saveLocation = new SaveLocation<User>(" ", "/voice-save/" + server + ".txt", VoiceManager::toUser, ar -> {
+                System.out.println("ar");
+                return String.valueOf(ar.getId());
+            });
             saveLocation.loadAll();
             return saveLocation;
         } catch (IOException e) {
