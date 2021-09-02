@@ -1,8 +1,9 @@
 package io.github.alexiscomete.vocal_notif;
 
-import org.javacord.api.listener.interaction.SlashCommandCreateListener;
+import org.javacord.api.event.interaction.SlashCommandCreateEvent;
+import org.javacord.api.interaction.SlashCommandInteraction;
 
-public abstract class CommandBot implements SlashCommandCreateListener {
+public abstract class CommandBot {
 
     String description, name;
 
@@ -10,4 +11,6 @@ public abstract class CommandBot implements SlashCommandCreateListener {
         this.description = description;
         this.name = name;
     }
+
+    public abstract void execute(SlashCommandCreateEvent event, SlashCommandInteraction interaction);
 }

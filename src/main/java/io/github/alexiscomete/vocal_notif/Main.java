@@ -28,15 +28,17 @@ public class Main {
 
         api.addListener(new VoiceListener());
 
+        api.addSlashCommandCreateListener(new SlashCommandListener());
+
         addCommand(new NotifCommand());
         addCommand(new Credits());
     }
 
     public static void addCommand(CommandBot commandBot) {
-        SlashCommand command = SlashCommand.with(commandBot.name, commandBot.description)
+        SlashCommand.with(commandBot.name, commandBot.description)
                 .createGlobal(api)
                 .join();
-        api.addSlashCommandCreateListener(commandBot);
+        SlashCommandListener.commands.put(commandBot.name, commandBot);
     }
 
 }

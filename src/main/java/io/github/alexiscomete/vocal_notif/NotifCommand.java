@@ -2,6 +2,7 @@ package io.github.alexiscomete.vocal_notif;
 
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;
+import org.javacord.api.listener.interaction.SlashCommandCreateListener;
 
 public class NotifCommand extends CommandBot {
 
@@ -10,8 +11,7 @@ public class NotifCommand extends CommandBot {
     }
 
     @Override
-    public void onSlashCommandCreate(SlashCommandCreateEvent event) {
-        SlashCommandInteraction interaction = event.getSlashCommandInteraction();
+    public void execute(SlashCommandCreateEvent event, SlashCommandInteraction interaction) {
         if (interaction.getServer().isPresent()) {
             VoiceManager.switchUser(interaction.getServer().get().getId(), interaction.getUser().getId());
             interaction.createImmediateResponder()
