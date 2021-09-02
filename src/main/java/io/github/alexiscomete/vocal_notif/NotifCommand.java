@@ -1,20 +1,26 @@
 package io.github.alexiscomete.vocal_notif;
 
-import org.javacord.api.event.message.MessageCreateEvent;
+import org.javacord.api.event.interaction.SlashCommandCreateEvent;
+import org.javacord.api.interaction.SlashCommandInteraction;
 
 public class NotifCommand extends CommandBot {
 
     public NotifCommand() {
-        super("Permet de recevoir une notif lors de la connexion d'une personne à un salon vocal sur ce serveur", "notif", "Permet de recevoir une notif lors de la connexion d'une personne à un salon vocal sur ce serveur, vous ne recevrez pas de message si le salon n'est pas visible pour vous, vous pouvez vous désabonner avec cette commande");
+        super("Permet de recevoir une notif lors de la connexion d'une personne à un salon vocal sur ce serveur", "notif");
     }
 
     @Override
-    void execute(MessageCreateEvent messageCreateEvent, String content, String[] args) {
-        if (messageCreateEvent.isServerMessage()) {
-            VoiceManager.switchUser(messageCreateEvent.getServer().get().getId(), messageCreateEvent.getMessageAuthor().getId());
-            messageCreateEvent.getMessage().reply("✅");
+    public void onSlashCommandCreate(SlashCommandCreateEvent event) {
+        SlashCommandInteraction interaction = event.getSlashCommandInteraction();
+        if (interaction.getServer().isPresent()) {
+            VoiceManager.switchUser(interaction.getServer().get().getId(), interaction.getUser().getId());
+            interaction.createImmediateResponder()
+                    .setContent("✅")
+                    .respond();
         } else {
-            messageCreateEvent.getMessage().reply("Vous devez être dans un serveur");
+            interaction.createImmediateResponder()
+                    .setContent("Vous devez être dans un serveur")
+                    .respond();
         }
     }
 }

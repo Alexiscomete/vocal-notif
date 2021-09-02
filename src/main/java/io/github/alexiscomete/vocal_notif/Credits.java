@@ -1,19 +1,23 @@
 package io.github.alexiscomete.vocal_notif;
 
 import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.event.message.MessageCreateEvent;
+import org.javacord.api.event.interaction.SlashCommandCreateEvent;
+import org.javacord.api.interaction.SlashCommandInteraction;
 
 import java.awt.*;
 
 public class Credits extends CommandBot {
     public Credits() {
-        super("Affiche les crédits", "credits", "Faites cette commande pour voir ce qu'elle fait !!");
+        super("Affiche les crédits", "credits");
     }
 
     @Override
-    void execute(MessageCreateEvent messageCreateEvent, String content, String[] args) {
+    public void onSlashCommandCreate(SlashCommandCreateEvent event) {
+        SlashCommandInteraction interaction = event.getSlashCommandInteraction();
         EmbedBuilder builder = new EmbedBuilder();
-        builder.setFooter("Code de base en 1 jour !").setTitle("Crédits").setColor(Color.green).setDescription("Idée de <@340593676801802250> (moi2985#5522). Il a un bot qui fait la même chose mais il veut le garder privé pour éviter de surcharger son VPS");
-        messageCreateEvent.getMessage().reply(builder);
+        builder.setFooter("Hébergé par <@477122844208267301>").setTitle("Crédits").setColor(Color.green).setDescription("Idée de <@340593676801802250> (moi2985#5522). Il a un bot qui fait la même chose mais il veut le garder privé pour éviter de surcharger son VPS");
+        interaction.createImmediateResponder()
+                .addEmbed(builder)
+                .respond();
     }
 }

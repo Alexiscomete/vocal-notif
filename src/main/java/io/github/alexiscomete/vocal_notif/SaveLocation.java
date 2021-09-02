@@ -83,10 +83,6 @@ public class SaveLocation<E> {
         return content;
     }
 
-    public void setContent(ArrayList<E> content) {
-        this.content = content;
-    }
-
     public static void create(String path) throws IOException {
         File file = new File(pathStatic + path);
         if (path.endsWith("/")) {
