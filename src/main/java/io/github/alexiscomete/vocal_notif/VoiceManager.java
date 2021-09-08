@@ -8,6 +8,7 @@ import org.javacord.api.entity.server.invite.InviteBuilder;
 import org.javacord.api.entity.user.User;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,8 +30,8 @@ public class VoiceManager {
         }
         CompletableFuture<User> op = Main.api.getUserById(userID);
         op.thenAcceptAsync(user -> {
-            System.out.println("sw");
-            if (server.getContent().contains(user)) {
+            System.out.println(user.getId());
+            if (contains(server.getContent(), user)) {
                 System.out.println("co");
                 server.getContent().remove(user);
             } else {
@@ -78,5 +79,19 @@ public class VoiceManager {
     public static User toUser(String str) {
         Optional<User> op = Main.api.getCachedUserById(str);
         return op.orElse(null);
+    }
+
+    public static boolean contains(ArrayList<User> users, User user) {
+        for (User u : users) {
+            if (u != null) {
+                System.out.println(u.getId());
+                System.out.println(user.getId());
+                System.out.println(u.getId() == user.getId());
+                if (u.getId() == user.getId()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
