@@ -31,7 +31,7 @@ public class VoiceManager {
         CompletableFuture<User> op = Main.api.getUserById(userID);
         op.thenAcceptAsync(user -> {
             System.out.println(user.getId());
-            if (contains(server.getContent(), user)) {
+            if (contains(server.getContent(), user)) { // the bug
                 System.out.println("co");
                 server.getContent().remove(user);
             } else {
@@ -77,7 +77,7 @@ public class VoiceManager {
     }
 
     public static User toUser(String str) {
-        Optional<User> op = Main.api.getCachedUserById(str);
+        Optional<User> op = Main.api.getCachedUserById(str); //src of the bug ?
         return op.orElse(null);
     }
 
