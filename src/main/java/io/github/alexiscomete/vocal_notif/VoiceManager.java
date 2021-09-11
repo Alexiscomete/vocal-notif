@@ -9,8 +9,8 @@ import org.javacord.api.entity.user.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class VoiceManager {
 
@@ -77,11 +77,16 @@ public class VoiceManager {
     }
 
     public static User toUser(String str) {
-        Optional<User> op = Main.api.getCachedUserById(str); //src of the bug ?
-        return op.orElse(null);
+        System.out.println("to user : " + str);
+        CompletableFuture<User> op = Main.api.getUserById(str); //src of the bug ?
+        AtomicReference<User> user = new AtomicReference<>();
+        op.thenAccept(user::set);
+        System.out.println(user.get());
+        return user.get();
     }
 
     public static boolean contains(ArrayList<User> users, User user) {
+        System.out.println(users.size());
         for (User u : users) {
             if (u != null) {
                 System.out.println(u.getId());
