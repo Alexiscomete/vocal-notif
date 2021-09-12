@@ -23,13 +23,13 @@ public class VoiceManager {
     }
 
     public static void switchUser(long serverID, long userID) {
-        SaveLocation<User> server = getServer(serverID);
-        if (server == null) {
-            System.out.println("null");
-            return;
-        }
         CompletableFuture<User> op = Main.api.getUserById(userID);
         op.thenAcceptAsync(user -> {
+            SaveLocation<User> server = getServer(serverID);
+            if (server == null) {
+                System.out.println("null");
+                return;
+            }
             System.out.println(user.getId());
             if (contains(server.getContent(), user)) { // the bug
                 System.out.println("co");
@@ -43,15 +43,15 @@ public class VoiceManager {
     }
 
     public static void notifServer(Server serv, VoiceChannel voiceChannel, User us) {
-        System.out.println("notif");
-        SaveLocation<User> server = getServer(serv.getId());
-        if (server == null) {
-            return;
-        }
         CompletableFuture<Invite> inviteF = new InviteBuilder((ServerChannel) voiceChannel).setNeverExpire().create();
         System.out.println("Invite ->");
         inviteF.thenAcceptAsync(invite -> {
             System.out.println("<-");
+            SaveLocation<User> server = getServer(serv.getId());
+            if (server == null) {
+                return;
+            }
+            System.out.println("notif");
             for (User user : server.getContent()) {
                 System.out.println("User");
                 if (user != null && voiceChannel.canConnect(user) && user.getId() != us.getId()) {
@@ -78,9 +78,15 @@ public class VoiceManager {
 
     public static User toUser(String str) {
         System.out.println("to user : " + str);
-        CompletableFuture<User> op = Main.api.getUserById(str); //src of the bug ?
+        CompletableFuture<User> op = Main.api.getUserById(Long.parseLong(str)); //src of the bug ?
         AtomicReference<User> user = new AtomicReference<>();
-        op.thenAccept(user::set);
+        VoiceManager waitUser = new VoiceManager();
+        op.thenAcceptAsync(us -> {
+            user.set(us);
+            System.out.println("accept");
+            waitUser.notifyAll();
+        });
+        waitUser.waitForUser();
         System.out.println(user.get());
         return user.get();
     }
@@ -98,5 +104,13 @@ public class VoiceManager {
             }
         }
         return false;
+    }
+
+    public void waitForUser() {
+        try {
+            this.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
