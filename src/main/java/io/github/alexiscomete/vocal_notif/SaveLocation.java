@@ -72,7 +72,10 @@ public class SaveLocation<E> {
             }
             String[] str = String.valueOf(answer).split(sep);
             for (String s : str) {
-                content.add(a.apply(s));
+                E e = a.apply(s);
+                if (e != null) {
+                    content.add(e);
+                }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

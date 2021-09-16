@@ -23,11 +23,18 @@ public class VoiceManager {
     public static void switchUser(long serverID, long userID) {
         CompletableFuture<User> op = Main.api.getUserById(userID);
         op.thenAcceptAsync(user -> {
+            if (user == null) {
+                System.out.println("user null");
+                return;
+            }
+            System.out.println("...");
             SaveLocation<Long> server = getServer(serverID);
+            System.out.println("---");
             if (server == null) {
                 System.out.println("null");
                 return;
             }
+            System.out.println("User id :");
             System.out.println(user.getId());
             if (server.getContent().contains(user.getId())) { // the bug
                 System.out.println("co");
@@ -37,6 +44,7 @@ public class VoiceManager {
                 server.getContent().add(user.getId());
             }
             server.saveAll();
+            System.out.println("Save !");
         });
     }
 
@@ -65,7 +73,13 @@ public class VoiceManager {
 
     public static SaveLocation<Long> getServer(long server) {
         try {
-            SaveLocation<Long> saveLocation = new SaveLocation<>(" ", "/voice-save/" + server + ".txt", Long::parseLong, String::valueOf);
+            SaveLocation<Long> saveLocation = new SaveLocation<>(" ", "/voice-save/" + server + ".txt", str -> {
+                try {
+                    return Long.parseLong(str);
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            }, String::valueOf);
             saveLocation.loadAll();
             return saveLocation;
         } catch (IOException e) {
