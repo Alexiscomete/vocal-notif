@@ -62,7 +62,13 @@ public class VoiceManager {
                 CompletableFuture<User> coUser = Main.api.getUserById(userId);
                 coUser.thenAcceptAsync(user -> {
                     System.out.println("User");
-                    if (user != null && voiceChannel.canConnect(user) && userId != us.getId()) {
+                    if (user == null) {
+                        System.out.println("null");
+                        return;
+                    }
+                    System.out.println(voiceChannel.canConnect(user));
+                    System.out.println(userId != us.getId());
+                    if (/*voiceChannel.canConnect(user) &&*/ userId != us.getId()) {
                         user.sendMessage("Salut ! <@" + us.getId() + "> (" + us.getName() + ")  est en vocal sur un serveur ... clique sur le lien pour le rejoindre : https://discord.gg/" + invite.getCode());
                     }
                 });
