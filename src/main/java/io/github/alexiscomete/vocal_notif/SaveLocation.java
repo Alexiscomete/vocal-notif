@@ -51,24 +51,33 @@ public class SaveLocation<E> {
             }
         }
         System.out.println("Save : " + save);
-        FileOutputStream fos;
+        FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(file);
             fos.write(save.toString().getBytes());
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
+            if (fos != null) {
+                try {
+                    fos.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
     }
 
     public void loadAll() {
-        Scanner sc;
+        Scanner sc = null;
         try {
             sc = new Scanner(file);
             StringBuilder answer = new StringBuilder();
-            while (sc.hasNextLine()) {
+            boolean nextLine = sc.hasNextLine();
+            while (nextLine) {
                 answer.append(sc.nextLine());
-                if (sc.hasNextLine()) answer.append("\n");
+                nextLine = sc.hasNextLine();
+                if (nextLine) answer.append("\n");
             }
             String[] str = String.valueOf(answer).split(sep);
             for (String s : str) {
@@ -79,6 +88,9 @@ public class SaveLocation<E> {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+        if (sc != null) {
+            sc.close();
         }
     }
 

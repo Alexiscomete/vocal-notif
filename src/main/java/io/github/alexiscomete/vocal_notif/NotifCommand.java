@@ -2,7 +2,6 @@ package io.github.alexiscomete.vocal_notif;
 
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;
-import org.javacord.api.listener.interaction.SlashCommandCreateListener;
 
 public class NotifCommand extends CommandBot {
 
@@ -13,10 +12,21 @@ public class NotifCommand extends CommandBot {
     @Override
     public void execute(SlashCommandCreateEvent event, SlashCommandInteraction interaction) {
         if (interaction.getServer().isPresent()) {
-            VoiceManager.switchUser(interaction.getServer().get().getId(), interaction.getUser().getId());
-            interaction.createImmediateResponder()
-                    .setContent("✅")
-                    .respond();
+            short answer = VoiceManager.switchUser(interaction.getServer().get().getId(), interaction.getUser());
+            if (answer == -1) {
+                interaction.createImmediateResponder()
+                        .setContent("Une erreur est survenue")
+                        .respond();
+            } else if (answer == 1) {
+                interaction.createImmediateResponder()
+                        .setContent("✅ Notifications activées")
+                        .respond();
+            } else {
+                interaction.createImmediateResponder()
+                        .setContent("❌ notifications désactivées")
+                        .respond();
+            }
+
         } else {
             interaction.createImmediateResponder()
                     .setContent("Vous devez être dans un serveur")
