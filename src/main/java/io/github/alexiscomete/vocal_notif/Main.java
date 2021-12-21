@@ -17,8 +17,6 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
 
     public static void main(String[] args) {
@@ -32,6 +30,7 @@ public class Main {
 
         addCommand(new NotifCommand());
         addCommand(new Credits());
+        addCommand(new InviteCommand());
     }
 
     public static void addCommand(CommandBot commandBot) {
